@@ -1,0 +1,73 @@
+﻿@model FileAddTextToFileRequest
+@{
+        ViewBag.Title = "Add text to file";
+}
+
+<h1>Add text</h1>
+
+<form asp-controller="File" asp-action="AddText" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <p>Are you sure you want to delete the file <strong>@Model.FileName</strong>?</p>
+	@*FileName*@
+	<div class="form-field flex">
+		<div class="w-25">
+			<label for="FileName" class="form-label pt">File Name</label>
+		</div>
+		<div class="flex-1">
+			<div class="flex-1">
+				<input asp-for="FileName" class="form-input" placeholder="File Name" disabled="disabled" />
+				<span asp-validation-for="FileName" class="text-red"></span>
+			</div>
+		</div>
+	</div>
+
+	@*FilePath*@
+	<div class="form-field flex">
+		<div class="w-25">
+			<label for="FilePath" class="form-label pt">File path</label>
+		</div>
+		<div class="flex-1">
+			<div class="flex-1">
+				<input asp-for="FilePath" class="form-input" placeholder="File path" disabled="disabled" />
+				<span asp-validation-for="FilePath" class="text-red"></span>
+			</div>
+		</div>
+	</div>
+
+	@*Text to add*@
+	<div class="form-field flex">
+		<div class="w-25">
+			<label for="TextToAdd" class="form-label pt">Text to add</label>
+		</div>
+		<div class="flex-1">
+			<div class="flex-1">
+				<input asp-for="TextToAdd" class="form-input" placeholder="" />
+				<span asp-validation-for="TextToAdd" class="text-red"></span>
+			</div>
+		</div>
+	</div>
+
+	@*Submit*@
+	<div class="form-field flex">
+		<div class="w-25">
+		</div>
+		<div class="flex-1">
+			<div class="flex-1">
+				<button class="button button-green-back">Add</button>
+				<div asp-validation-summary="All" class="text-red"></div>
+				@if (ViewBag.Errors != null)
+				{
+					<div class="text-red ml">
+						<ul>
+							@foreach (var error in ViewBag.Errors)
+							{
+								<li class="ml">@error</li>
+							}
+						</ul>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+    <a asp-controller="File" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

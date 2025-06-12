@@ -1,0 +1,32 @@
+﻿@model IEnumerable<FileResponse>
+@{
+    ViewBag.Title = "File List";
+}
+
+
+<h1>Files</h1>
+
+<a asp-controller="File" asp-action="AddFile" class="link-hover">Add file</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>File Path</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var file in Model)
+        {
+            <tr>
+                <td>@file.FileName</td>
+                <td>@file.FilePath</td>
+                <td>
+                    <a asp-controller="File" asp-action="Delete" asp-route-fileID="@file.Id" class="link-hover">Delete</a>
+                    <a asp-controller="File" asp-action="AddText" asp-route-fileID="@file.Id" class="link-hover">Add text</a>
+                    <a asp-controller="File" asp-action="Rename" asp-route-fileID="@file.Id" class="link-hover">Rename file</a>
+                </td>
+            </tr>
+        }
+    </tbody>

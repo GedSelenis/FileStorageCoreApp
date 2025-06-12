@@ -1,0 +1,60 @@
+﻿@model FileAddRequest
+@{
+    ViewBag.Title = "Add File";
+}
+
+<a asp-controller="File" asp-action="Index" class="link-hover">Back to Persons List</a>
+
+<div>
+    <form asp-controller="File" asp-action="Create" method="post">
+
+        @*File path*@
+		<div class="form-field flex">
+			<div class="w-25">
+				<label for="FilePath" class="form-label pt">File Path</label>
+			</div>
+			<div class="flex-1">
+				<div class="flex-1">
+					<input asp-for="FilePath" class="form-input" placeholder="File Path" />
+					<span asp-validation-for="FilePath" class="text-red"></span>
+				</div>
+			</div>
+		</div>
+		@*File Name*@
+		<div class="form-field flex">
+			<div class="w-25">
+				<label for="FileName" class="form-label pt">File Name</label>
+			</div>
+			<div class="flex-1">
+				<div class="flex-1">
+					<input asp-for="FileName" class="form-input" placeholder="File Name" />
+					<span asp-validation-for="FileName" class="text-red"></span>
+				</div>
+			</div>
+		</div>
+
+		@*Submit*@
+		<div class="form-field flex">
+			<div class="w-25">
+			</div>
+			<div class="flex-1">
+				<div class="flex-1">
+					<button class="button button-green-back">Create</button>
+					<div asp-validation-summary="All" class="text-red"></div>
+					@if (ViewBag.Errors != null)
+					{
+						<div class="text-red ml">
+							<ul>
+								@foreach (var error in ViewBag.Errors)
+								{
+									<li class="ml">@error</li>
+								}
+							</ul>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+
+    </form>
+</div>
