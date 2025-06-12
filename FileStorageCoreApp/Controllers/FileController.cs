@@ -101,8 +101,6 @@ namespace FileStorageCoreApp.Controllers
             {
                 return RedirectToAction("Index", "File");
             }
-            fileInputResponse.FileName = fileResponse.FileName;
-            fileInputResponse.FilePath = fileResponse.FilePath;
             await _fileDetailsService.AddTextToFileAsync(fileInputResponse);
             return RedirectToAction("Index", "File");
         }
@@ -135,8 +133,6 @@ namespace FileStorageCoreApp.Controllers
             {
                 return RedirectToAction("Index", "File");
             }
-            fileInputResponse.FileName = fileResponse.FileName;
-            fileInputResponse.FilePath = fileResponse.FilePath;
             _fileDetailsService.RenameFile(fileInputResponse);
             return RedirectToAction("Index", "File");
         }
