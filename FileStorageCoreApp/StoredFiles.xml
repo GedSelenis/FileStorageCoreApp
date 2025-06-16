@@ -6,11 +6,6 @@
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
   </FileDetails>
   <FileDetails>
-    <Id>4f502a0a-63d0-4b1f-9d1c-6c7556b98ea3</Id>
-    <FileName>Text55.txt</FileName>
-    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-  </FileDetails>
-  <FileDetails>
     <Id>89ee40a4-b5d6-4ebe-9a2d-078f912ace6b</Id>
     <FileName>Test1.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
@@ -18,6 +13,11 @@
   <FileDetails>
     <Id>34459f57-061c-419d-9545-88ad5e926653</Id>
     <FileName>Info2.txt</FileName>
+    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+  </FileDetails>
+  <FileDetails>
+    <Id>4f502a0a-63d0-4b1f-9d1c-6c7556b98ea3</Id>
+    <FileName>Text5.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
   </FileDetails>
 </ArrayOfFileDetails>
