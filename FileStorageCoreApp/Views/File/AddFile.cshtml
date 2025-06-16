@@ -33,6 +33,19 @@
 			</div>
 		</div>
 
+		@*File Folder*@
+		<div class="form-field flex">
+			<div class="w-25">
+				<label for="VirtualFolder" class="form-label pt">Virtual Folder</label>
+			</div>
+			<div class="flex-1">
+				<div class="flex-1">
+					<input asp-for="VirtualFolder" class="form-input" />
+					<span asp-validation-for="VirtualFolder" class="text-red"></span>
+				</div>
+			</div>
+		</div>
+
 		@*Submit*@
 		<div class="form-field flex">
 			<div class="w-25">

@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfFileDetails xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileDetails>
-    <Id>49718623-4314-41e2-85fc-4ca9f25f6a0c</Id>
-    <FileName>Info3.txt</FileName>
+    <Id>4b542f7c-c1b6-41ab-9676-8088d1bb24fe</Id>
+    <FileName>Test5.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirtualFolder>Folder1</VirtualFolder>
   </FileDetails>
   <FileDetails>
-    <Id>89ee40a4-b5d6-4ebe-9a2d-078f912ace6b</Id>
+    <Id>809083c4-8233-4241-823e-26a3231288da</Id>
+    <FileName>Info.txt</FileName>
+    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirtualFolder>Folder1</VirtualFolder>
+  </FileDetails>
+  <FileDetails>
+    <Id>ab1e3f56-a66c-4689-a97f-6b9d886f8943</Id>
+    <FileName>Test5 (0).txt</FileName>
+    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirtualFolder>Folder1</VirtualFolder>
+  </FileDetails>
+  <FileDetails>
+    <Id>7ca4640a-0789-4aef-a35d-d4ac6d4788d5</Id>
     <FileName>Test1.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirtualFolder>Folder1</VirtualFolder>
   </FileDetails>
   <FileDetails>
-    <Id>34459f57-061c-419d-9545-88ad5e926653</Id>
-    <FileName>Info2.txt</FileName>
+    <Id>f49b9fef-cee6-40b3-8afa-5f31c92186b3</Id>
+    <FileName>Test2.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirtualFolder>Folder1</VirtualFolder>
   </FileDetails>
   <FileDetails>
-    <Id>4f502a0a-63d0-4b1f-9d1c-6c7556b98ea3</Id>
-    <FileName>Text5.txt</FileName>
+    <Id>4704ec3b-f576-475b-8288-28536065cd44</Id>
+    <FileName>Text45.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirtualFolder>Folder1</VirtualFolder>
   </FileDetails>
 </ArrayOfFileDetails>

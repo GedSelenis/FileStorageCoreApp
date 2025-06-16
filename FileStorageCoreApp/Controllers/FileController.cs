@@ -118,7 +118,8 @@ namespace FileStorageCoreApp.Controllers
             {
                 Id = fileResponse.Id,
                 FileName = fileResponse.FileName,
-                FilePath = fileResponse.FilePath
+                FilePath = fileResponse.FilePath,
+                VirtualFolder = fileResponse.VirtualFolder
             };
 
             return View(fileRenameRequest);

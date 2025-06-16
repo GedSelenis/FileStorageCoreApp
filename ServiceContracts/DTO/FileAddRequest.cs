@@ -11,6 +11,7 @@ namespace ServiceContracts.DTO
     { 
         public string FileName { get; set; }
         public string FilePath { get; set; }
+        public string VirtualFolder { get; set; }
         public FileAddRequest(string fileName, string filePath)
         {
             FileName = fileName;
@@ -24,7 +25,7 @@ namespace ServiceContracts.DTO
 
         public FileDetails ToFileDetails()
         {
-            return new FileDetails(FileName, FilePath);
+            return new FileDetails(FileName, FilePath, VirtualFolder);
         }
     }
 }

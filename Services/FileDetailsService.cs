@@ -49,7 +49,7 @@ namespace Services
                 throw new ArgumentNullException(nameof(fileAddTextToFileRequest), "FileAddTextToFileRequest cannot be null.");
             }
             ValidationHelper.ModelValidation(fileAddTextToFileRequest);
-            using (var streamWriter = new StreamWriter( Path.Combine(fileAddTextToFileRequest.FilePath, fileAddTextToFileRequest.FileName), true))
+            using (var streamWriter = new StreamWriter(Path.Combine(fileAddTextToFileRequest.FilePath, fileAddTextToFileRequest.FileName), true))
             {
                 await streamWriter.WriteLineAsync(fileAddTextToFileRequest.TextToAdd);
             }
@@ -114,6 +114,22 @@ namespace Services
             {
                 throw new KeyNotFoundException($"File with ID {fileRenameRequest.Id} not found.");
             }
+            if (_fileDetailsList.Any(f => f.FileName == fileRenameRequest.NewFileName && f.VirtualFolder == fileRenameRequest.VirtualFolder))
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    string newFileName = $"{fileRenameRequest.NewFileName.Split('.')[0]} ({i}).{fileRenameRequest.NewFileName.Split('.')[1]}";
+                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirtualFolder == fileRenameRequest.VirtualFolder))
+                    {
+                        fileRenameRequest.NewFileName = newFileName;
+                        break;
+                    }
+                    else if (i == 99)
+                    {
+                        throw new InvalidOperationException("Unable to generate a unique file name after 100 attempts.");
+                    }
+                }
+            }
             string oldFilePath = Path.Combine(fileDetails.FilePath, fileDetails.FileName);
             string newFilePath = Path.Combine(fileDetails.FilePath, fileRenameRequest.NewFileName);
             File.Move(oldFilePath, newFilePath);
@@ -133,6 +149,26 @@ namespace Services
             }
             ValidationHelper.ModelValidation(fileAddRequest);
             FileDetails fileDetails = fileAddRequest.ToFileDetails();
+            if (_fileDetailsList.Any(f => f.FileName == fileAddRequest.FileName && f.VirtualFolder == fileAddRequest.VirtualFolder))
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    string newFileName = $"{fileAddRequest.FileName.Split('.')[0]} ({i}).{fileAddRequest.FileName.Split('.')[1]}";
+                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirtualFolder == fileAddRequest.VirtualFolder))
+                    {
+                        fileDetails.FileName = newFileName;
+                        break;
+                    }
+                    else if (i == 99)
+                    {
+                        throw new InvalidOperationException("Unable to generate a unique file name after 100 attempts.");
+                    }
+                }
+            }
+            if (!File.Exists(Path.Combine(fileDetails.FilePath, fileDetails.FileName)))
+            {
+                File.Create(Path.Combine(fileDetails.FilePath, fileDetails.FileName)).Dispose();
+            }
             _fileDetailsList.Add(fileDetails);
             WriteXmlFile(_fileDetailsList);
             return fileDetails.ToFileResponse();
