@@ -7,12 +7,6 @@
     <VirtualFolder>Folder1</VirtualFolder>
   </FileDetails>
   <FileDetails>
-    <Id>809083c4-8233-4241-823e-26a3231288da</Id>
-    <FileName>Info.txt</FileName>
-    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirtualFolder>Folder1</VirtualFolder>
-  </FileDetails>
-  <FileDetails>
     <Id>ab1e3f56-a66c-4689-a97f-6b9d886f8943</Id>
     <FileName>Test5 (0).txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
@@ -31,8 +25,14 @@
     <VirtualFolder>Folder1</VirtualFolder>
   </FileDetails>
   <FileDetails>
-    <Id>4704ec3b-f576-475b-8288-28536065cd44</Id>
-    <FileName>Text45.txt</FileName>
+    <Id>e566e817-d99d-4de9-be30-d9c1d74bc91a</Id>
+    <FileName>Test3.txt</FileName>
+    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirtualFolder>Folder1</VirtualFolder>
+  </FileDetails>
+  <FileDetails>
+    <Id>809083c4-8233-4241-823e-26a3231288da</Id>
+    <FileName>Info1.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
     <VirtualFolder>Folder1</VirtualFolder>
   </FileDetails>

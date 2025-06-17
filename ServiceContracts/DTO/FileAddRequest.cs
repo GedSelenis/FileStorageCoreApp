@@ -1,6 +1,7 @@
 ﻿using Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +9,10 @@ using System.Threading.Tasks;
 namespace ServiceContracts.DTO
 {
     public class FileAddRequest
-    { 
+    {
+        [Required(ErrorMessage = "FileName cannot be blank")]
         public string FileName { get; set; }
+        [Required(ErrorMessage = "FilePath cannot be blank")]
         public string FilePath { get; set; }
         public string VirtualFolder { get; set; }
         public FileAddRequest(string fileName, string filePath)
