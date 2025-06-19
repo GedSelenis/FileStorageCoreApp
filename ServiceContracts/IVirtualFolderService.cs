@@ -14,5 +14,6 @@ namespace ServiceContracts
         Task<FolderResponse> GetFolderById(Guid id);
         Task<FolderResponse> UpdateFolder(FolderUpdateRequest folderUpdateRequest);
         Task<bool> DeleteFolder(Guid id);
+        Task<FolderResponse> MoveToFolder(FolderToFolderRequest folderToFolderRequest);
     }
 }

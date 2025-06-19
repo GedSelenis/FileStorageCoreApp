@@ -118,5 +118,38 @@ namespace Services
 
             return folderToUpdate.ToFolderResponse();
         }
+
+        public async Task<FolderResponse> MoveToFolder(FolderToFolderRequest folderToFolderRequest)
+        {
+            if (folderToFolderRequest == null)
+            {
+                throw new ArgumentException("Invalid folder move request.");
+            }
+            ValidationHelper.ModelValidation(folderToFolderRequest);
+            VirtualFolder? sourceFolder = _virtualFolderList.FirstOrDefault(x => x.Id == folderToFolderRequest.Id);
+            VirtualFolder? destinationFolder = _virtualFolderList.FirstOrDefault(x => x.Id == folderToFolderRequest.ParentFolderId);
+            if (sourceFolder == null || destinationFolder == null)
+            {
+                throw new KeyNotFoundException("Source or destination folder not found.");
+            }
+            else if (sourceFolder.Id == destinationFolder.Id)
+            {
+                throw new ArgumentException("Source and destination folders cannot be the same.");
+            }
+
+            // Check if any of the children are the same as the source folder
+            while (destinationFolder.ParentFolderId != Guid.Empty)
+            {
+                if (destinationFolder.ParentFolderId == sourceFolder.Id)
+                {
+                    throw new ArgumentException("Cannot move folder into its own subfolder.");
+                }
+                destinationFolder = _virtualFolderList.FirstOrDefault(x => x.Id == destinationFolder.ParentFolderId);
+            }
+
+            sourceFolder.ParentFolderId = folderToFolderRequest.ParentFolderId;
+            WriteXmlFile(_virtualFolderList);
+            return sourceFolder.ToFolderResponse();
+        }
     }
 }

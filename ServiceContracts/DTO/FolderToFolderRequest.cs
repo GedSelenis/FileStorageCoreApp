@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities
+namespace ServiceContracts.DTO
 {
-    public class VirtualFolder
+    public class FolderToFolderRequest
     {
         public Guid Id { get; set; }
         public Guid? ParentFolderId { get; set; }
-        public string? FolderName { get; set; }
-
     }
 }

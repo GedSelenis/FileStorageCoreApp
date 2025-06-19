@@ -117,7 +117,20 @@ namespace Services
             List<FileResponse> fileResponses = _fileDetailsList.Select(f => f.ToFileResponse()).ToList();
             for (int i = 0; i < fileResponses.Count; i++)
             {
-                fileResponses[i].VirualFolderName = _virtualFolderList.FirstOrDefault(f => f.Id == fileResponses[i].VirualFolderId)?.FolderName ?? "";
+                string virtualFoderPath = "";
+                VirtualFolder? virtualFolder = _virtualFolderList.FirstOrDefault(f => f.Id == fileResponses[i].VirualFolderId);
+                virtualFoderPath = virtualFolder?.FolderName ?? "";
+                if (virtualFolder != null && virtualFolder.ParentFolderId != null)
+                {
+                    VirtualFolder? parentFolder = _virtualFolderList.FirstOrDefault(f => f.Id == virtualFolder.ParentFolderId);
+                    while (parentFolder != null)
+                    {
+                        virtualFoderPath = Path.Combine(parentFolder.FolderName, virtualFoderPath);
+                        parentFolder = _virtualFolderList.FirstOrDefault(f => f.Id == parentFolder.ParentFolderId);
+                    }
+                }
+
+                fileResponses[i].VirualFolderName = virtualFoderPath;
             }
             return fileResponses;
         }
