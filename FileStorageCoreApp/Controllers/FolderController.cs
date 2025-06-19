@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services;
@@ -97,7 +98,7 @@ namespace FileStorageCoreApp.Controllers
         {
             if (folderUpdateRequest == null)
             {
-                return BadRequest("FileAddRequest cannot be null.");
+                return BadRequest("FolderUpdateRequest cannot be null.");
             }
             if (!ModelState.IsValid)
             {
@@ -105,6 +106,38 @@ namespace FileStorageCoreApp.Controllers
                 return View();
             }
             FolderResponse fileResponse = await _virtualFolderService.UpdateFolder(folderUpdateRequest);
+            return RedirectToAction("Index", "Folder");
+        }
+
+        [Route("MoveToFolder/{folderID}")]
+        [HttpGet]
+        public async Task<IActionResult> MoveToFolder(Guid folderID)
+        {
+            if (folderID == Guid.Empty)
+            {
+                return BadRequest("folder id must not be empty");
+            }
+            List<FolderResponse> virtualFolders = await _virtualFolderService.GetAllFolders();
+            virtualFolders.RemoveAll(temp => temp.Id == folderID);
+            ViewBag.VirtualFolders = (virtualFolders).Select(temp => new SelectListItem() { Text = temp.FolderName, Value = temp.Id.ToString() });
+            FolderToFolderRequest folderUpdateRequest = (await _virtualFolderService.GetFolderById(folderID)).ToFolderToFolderRequest();
+            return View(folderUpdateRequest);
+        }
+
+        [Route("MoveToFolder/{folderID}")]
+        [HttpPost]
+        public async Task<IActionResult> MoveToFolder(FolderToFolderRequest folderToFolderRequest)
+        {
+            if (folderToFolderRequest == null)
+            {
+                return BadRequest("FolderToFolderRequest cannot be null.");
+            }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return View();
+            }
+            FolderResponse fileResponse = await _virtualFolderService.MoveToFolder(folderToFolderRequest);
             return RedirectToAction("Index", "Folder");
         }
 

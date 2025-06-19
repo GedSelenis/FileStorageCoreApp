@@ -2,10 +2,12 @@
 <ArrayOfVirtualFolder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <VirtualFolder>
     <Id>a37a74a8-25eb-48bc-9f09-c1062c2fbfed</Id>
+    <ParentFolderId xsi:nil="true" />
     <FolderName>Folder1</FolderName>
   </VirtualFolder>
   <VirtualFolder>
     <Id>68fe105d-735c-4e77-88ed-0d5c7f46d510</Id>
+    <ParentFolderId xsi:nil="true" />
     <FolderName>Folder3</FolderName>
   </VirtualFolder>
 </ArrayOfVirtualFolder>

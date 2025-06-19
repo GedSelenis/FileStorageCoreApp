@@ -12,12 +12,25 @@ namespace ServiceContracts.DTO
         public Guid Id { get; set; }
         public string? FolderName { get; set; }
 
+        public string? VirtualPath { get; set; }
+
+        public Guid? ParentFolderId { get; set; }
+
         public FolderUpdateRequest ToFolderUpdateRequest()
         {
             return new FolderUpdateRequest()
             {
                 Id = Id,
                 FolderName = FolderName
+            };
+        }
+
+        public FolderToFolderRequest ToFolderToFolderRequest()
+        {
+            return new FolderToFolderRequest()
+            {
+                Id = Id,
+                ParentFolderId = ParentFolderId
             };
         }
 
@@ -30,7 +43,8 @@ namespace ServiceContracts.DTO
             return new FolderResponse
             {
                 Id = virtualFolder.Id,
-                FolderName = virtualFolder.FolderName
+                FolderName = virtualFolder.FolderName,
+                ParentFolderId = virtualFolder.ParentFolderId
             };
         }
     }

@@ -12,6 +12,7 @@
     <thead>
         <tr>
             <th>Folder Name</th>
+            <th>Virtual folder path</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -20,9 +21,11 @@
         {
             <tr>
                 <td>@folder.FolderName</td>
+                <td>@folder.VirtualPath</td>
                 <td>
                     <a asp-controller="Folder" asp-action="Delete" asp-route-folderID="@folder.Id" class="link-hover">Delete</a>
                     <a asp-controller="Folder" asp-action="UpdateFolder" asp-route-folderID="@folder.Id" class="link-hover">Update</a>
+                    <a asp-controller="Folder" asp-action="MoveToFolder" asp-route-folderID="@folder.Id" class="link-hover">Move</a>
                 </td>
             </tr>
         }

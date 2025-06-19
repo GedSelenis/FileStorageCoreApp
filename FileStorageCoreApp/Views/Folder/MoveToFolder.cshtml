@@ -1,0 +1,52 @@
+﻿@model FolderToFolderRequest
+@{
+	ViewBag.Title = "Move to Folder";
+}
+
+<a asp-controller="Folder" asp-action="Index" class="link-hover">Back to Folder List</a>
+
+<div>
+	<form asp-controller="Folder" asp-action="MoveToFolder" method="post">
+
+		<input type="hidden" asp-for="Id" />
+
+		@*Virtual folder*@
+		<div class="form-field flex">
+			<div class="w-25">
+				<label class="form-label pt" for="VirualFolderId">Parent virtual folder</label>
+			</div>
+			<div class="flex-1">
+				<div class="flex-1">
+					<select asp-for="ParentFolderId" class="form-input" asp-items="@ViewBag.VirtualFolders">
+						<option value="">Select a folder</option>
+					</select>
+					<span asp-validation-for="ParentFolderId" class="text-red"></span>
+				</div>
+			</div>
+		</div>
+
+		@*Submit*@
+		<div class="form-field flex">
+			<div class="w-25">
+			</div>
+			<div class="flex-1">
+				<div class="flex-1">
+					<button class="button button-green-back">Move</button>
+					<div asp-validation-summary="All" class="text-red"></div>
+					@if (ViewBag.Errors != null)
+					{
+						<div class="text-red ml">
+							<ul>
+								@foreach (var error in ViewBag.Errors)
+								{
+									<li class="ml">@error</li>
+								}
+							</ul>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+
+	</form>
+</div>

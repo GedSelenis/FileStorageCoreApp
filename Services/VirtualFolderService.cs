@@ -80,7 +80,26 @@ namespace Services
 
         public async Task<List<FolderResponse>> GetAllFolders()
         {
-            return _virtualFolderList.Select(folder => folder.ToFolderResponse()).ToList();
+            List<FolderResponse> virtualFolderResponses = _virtualFolderList.Select(folder => folder.ToFolderResponse()).ToList();
+
+            for (int i = 0; i < virtualFolderResponses.Count; i++)
+            {
+                string virtualFoderPath = "";
+                virtualFoderPath = virtualFolderResponses[i]?.FolderName ?? "";
+                if (virtualFolderResponses[i] != null && virtualFolderResponses[i].ParentFolderId != null)
+                {
+                    VirtualFolder? parentFolder = _virtualFolderList.FirstOrDefault(f => f.Id == virtualFolderResponses[i].ParentFolderId);
+                    while (parentFolder != null)
+                    {
+                        virtualFoderPath = Path.Combine(parentFolder.FolderName, virtualFoderPath);
+                        parentFolder = _virtualFolderList.FirstOrDefault(f => f.Id == parentFolder.ParentFolderId);
+                    }
+                }
+
+                virtualFolderResponses[i].VirtualPath = virtualFoderPath;
+            }
+
+            return virtualFolderResponses;
         }
 
         public async Task<FolderResponse> GetFolderById(Guid id)
@@ -128,17 +147,17 @@ namespace Services
             ValidationHelper.ModelValidation(folderToFolderRequest);
             VirtualFolder? sourceFolder = _virtualFolderList.FirstOrDefault(x => x.Id == folderToFolderRequest.Id);
             VirtualFolder? destinationFolder = _virtualFolderList.FirstOrDefault(x => x.Id == folderToFolderRequest.ParentFolderId);
-            if (sourceFolder == null || destinationFolder == null)
+            if (sourceFolder == null)
             {
                 throw new KeyNotFoundException("Source or destination folder not found.");
             }
-            else if (sourceFolder.Id == destinationFolder.Id)
+            else if (destinationFolder != null && sourceFolder.Id == destinationFolder.Id)
             {
                 throw new ArgumentException("Source and destination folders cannot be the same.");
             }
 
             // Check if any of the children are the same as the source folder
-            while (destinationFolder.ParentFolderId != Guid.Empty)
+            while (destinationFolder != null && destinationFolder.ParentFolderId != Guid.Empty)
             {
                 if (destinationFolder.ParentFolderId == sourceFolder.Id)
                 {
