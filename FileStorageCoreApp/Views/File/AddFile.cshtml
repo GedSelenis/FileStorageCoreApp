@@ -33,14 +33,16 @@
 			</div>
 		</div>
 
-		@*File Folder*@
+		@*Virtual folder*@
 		<div class="form-field flex">
 			<div class="w-25">
-				<label for="VirualFolderId" class="form-label pt">Virtual Folder ID</label>
+				<label class="form-label pt" for="VirualFolderId">Virtual folder</label>
 			</div>
 			<div class="flex-1">
 				<div class="flex-1">
-					<input asp-for="VirualFolderId" class="form-input" />
+					<select asp-for="VirualFolderId" class="form-input" asp-items="@ViewBag.VirtualFolders">
+						<option value="">Select a folder</option>
+					</select>
 					<span asp-validation-for="VirualFolderId" class="text-red"></span>
 				</div>
 			</div>

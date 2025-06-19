@@ -29,8 +29,9 @@ namespace FileStorageCoreApp.Controllers
 
         [Route("AddFile")]
         [HttpGet]
-        public IActionResult AddFile()
+        public async Task<IActionResult> AddFile()
         {
+            ViewBag.VirtualFolders = (await _virtualFolderService.GetAllFolders()).Select(temp => new SelectListItem() { Text = temp.FolderName, Value = temp.Id.ToString() });
             return View();
         }
 
