@@ -250,6 +250,10 @@ namespace Services
             {
                 throw new KeyNotFoundException($"File with ID {moveToFolderRequest.Id} not found.");
             }
+            else if (fileDetails.VirualFolderId == moveToFolderRequest.VirualFolderId)
+            {
+                throw new InvalidOperationException("File is already in the specified folder.");
+            }
             if (_fileDetailsList.Any(f => f.FileName == fileDetails.FileName && f.VirualFolderId == moveToFolderRequest.VirualFolderId))
             {
                 for (int i = 0; i < 100; i++)

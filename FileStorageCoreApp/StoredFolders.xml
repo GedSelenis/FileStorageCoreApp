@@ -8,7 +8,7 @@
   <VirtualFolder>
     <Id>68fe105d-735c-4e77-88ed-0d5c7f46d510</Id>
     <ParentFolderId>ae10b030-1231-4c4a-ae95-5256438ee662</ParentFolderId>
-    <FolderName>Folder3</FolderName>
+    <FolderName>InnerFolder</FolderName>
   </VirtualFolder>
   <VirtualFolder>
     <Id>ae10b030-1231-4c4a-ae95-5256438ee662</Id>
