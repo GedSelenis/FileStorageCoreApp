@@ -101,6 +101,13 @@ namespace FileStorageCoreApp.Controllers
 
         // Folder related APIs can be added here as needed
 
+        [Route("FolderIndex")]
+        public async Task<IActionResult> FolderIndex()
+        {
+            List<FolderResponse> folders = await _virtualFolderService.GetAllFolders();
+            return Json(folders);
+        }
+
         [Route("AddFolder")]
         [HttpPost]
         public async Task<IActionResult> AddFolder([FromBody] FolderAddRequest folderAddRequest)
@@ -132,6 +139,40 @@ namespace FileStorageCoreApp.Controllers
                 return Json(isDeleted);
             }
             return NotFound("Folder not found.");
+        }
+
+        [Route("UpdateFolder")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateFolder(FolderUpdateRequest folderUpdateRequest)
+        {
+            if (folderUpdateRequest == null)
+            {
+                return BadRequest("FolderUpdateRequest cannot be null.");
+            }
+            if (!ModelState.IsValid)
+            {
+                var Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Errors);
+            }
+            FolderResponse fileResponse = await _virtualFolderService.UpdateFolder(folderUpdateRequest);
+            return Json(fileResponse);
+        }
+
+        [Route("MoveFolderToFolder")]
+        [HttpPost]
+        public async Task<IActionResult> MoveFolderToFolder(FolderToFolderRequest folderToFolderRequest)
+        {
+            if (folderToFolderRequest == null)
+            {
+                return BadRequest("FolderToFolderRequest cannot be null.");
+            }
+            if (!ModelState.IsValid)
+            {
+                var Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Errors);
+            }
+            FolderResponse fileResponse = await _virtualFolderService.MoveToFolder(folderToFolderRequest);
+            return Json(fileResponse);
         }
     }
 }
