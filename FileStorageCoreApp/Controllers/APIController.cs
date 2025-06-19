@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using Services;
 
 namespace FileStorageCoreApp.Controllers
 {
@@ -9,9 +10,11 @@ namespace FileStorageCoreApp.Controllers
     {
 
         IFileService _fileDetailsService;
-        public APIController(IFileService fileDetailsService)
+        IVirtualFolderService _virtualFolderService;
+        public APIController(IFileService fileDetailsService, IVirtualFolderService virtualFolderService)
         {
             _fileDetailsService = fileDetailsService;
+            _virtualFolderService = virtualFolderService;
         }
 
         [Route("Index")]
@@ -82,6 +85,53 @@ namespace FileStorageCoreApp.Controllers
             fileInputResponse.VirualFolderId = fileResponse.VirualFolderId;
             FileResponse response = _fileDetailsService.RenameFile(fileInputResponse);
             return Json(response);
+        }
+
+        [Route("MoveToFolder")]
+        [HttpPost]
+        public async Task<IActionResult> MoveToFolder([FromBody] FileToFolderRequest fileToFolderRequest)
+        {
+            if (fileToFolderRequest == null)
+            {
+                throw new ArgumentNullException(nameof(fileToFolderRequest), "FileToFolderRequest cannot be null.");
+            }
+            FileResponse? fileResponse = _fileDetailsService.MoveToFolder(fileToFolderRequest);
+            return Json(fileResponse);
+        }
+
+        // Folder related APIs can be added here as needed
+
+        [Route("AddFolder")]
+        [HttpPost]
+        public async Task<IActionResult> AddFolder([FromBody] FolderAddRequest folderAddRequest)
+        {
+            if (folderAddRequest == null)
+            {
+                return BadRequest("FileAddRequest cannot be null.");
+            }
+            if (!ModelState.IsValid)
+            {
+                var Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Errors);
+            }
+            FolderResponse fileResponse = await _virtualFolderService.AddFolder(folderAddRequest);
+            return Json(fileResponse);
+        }
+
+        [Route("DeleteFolder/{folderID}")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteFolder(Guid folderID)
+        {
+            if (folderID == Guid.Empty)
+            {
+                return BadRequest("Invalid folder.");
+            }
+            bool isDeleted = await _virtualFolderService.DeleteFolder(folderID);
+            if (isDeleted)
+            {
+                return Json(isDeleted);
+            }
+            return NotFound("Folder not found.");
         }
     }
 }
