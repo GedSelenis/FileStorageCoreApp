@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services;
+using System.Threading.Tasks;
 
 namespace FileStorageCoreApp.Controllers
 {
@@ -19,9 +20,10 @@ namespace FileStorageCoreApp.Controllers
         }
         [Route("Index")]
         [Route("/")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<FileResponse> files = _fileDetailsService.ListFiles();
+            ViewBag.VirtualFolders = await _virtualFolderService.GetAllFolders();
             return View(files);
         }
 

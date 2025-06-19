@@ -4,7 +4,7 @@
 }
 
 
-<h1>Files</h1>
+<h2>Files table</h2>
 
 <a asp-controller="File" asp-action="AddFile" class="link-hover">Add file</a>
 
@@ -33,3 +33,31 @@
             </tr>
         }
     </tbody>
+
+</table>
+
+<h2>Folder table</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Folder Name</th>
+            <th>Virtual folder path</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var folder in ViewBag.VirtualFolders)
+        {
+            <tr>
+                <td>@folder.FolderName</td>
+                <td>@folder.VirtualPath</td>
+                <td>
+                    <a asp-controller="Folder" asp-action="Delete" asp-route-folderID="@folder.Id" class="link-hover">Delete</a>
+                    <a asp-controller="Folder" asp-action="UpdateFolder" asp-route-folderID="@folder.Id" class="link-hover">Update</a>
+                    <a asp-controller="Folder" asp-action="MoveToFolder" asp-route-folderID="@folder.Id" class="link-hover">Move</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

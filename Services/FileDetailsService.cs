@@ -114,6 +114,7 @@ namespace Services
         List<FileResponse> ListFilesAsync()
         {
             _fileDetailsList = ReadXmlFile();
+            _virtualFolderList = ReadStoredFoldersXmlFile();
             List<FileResponse> fileResponses = _fileDetailsList.Select(f => f.ToFileResponse()).ToList();
             for (int i = 0; i < fileResponses.Count; i++)
             {
