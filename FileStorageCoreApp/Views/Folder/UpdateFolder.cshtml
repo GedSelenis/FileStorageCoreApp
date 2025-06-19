@@ -6,7 +6,7 @@
 <a asp-controller="Folder" asp-action="Index" class="link-hover">Back to Folder List</a>
 
 <div>
-	<form asp-controller="Folder" asp-action="AddFolder" method="post">
+	<form asp-controller="Folder" asp-action="UpdateFolder" method="post">
 		
 		<input type="hidden" asp-for="Id" />
 
@@ -29,7 +29,7 @@
 			</div>
 			<div class="flex-1">
 				<div class="flex-1">
-					<button class="button button-green-back">Create</button>
+					<button class="button button-green-back">Update</button>
 					<div asp-validation-summary="All" class="text-red"></div>
 					@if (ViewBag.Errors != null)
 					{

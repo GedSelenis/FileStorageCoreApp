@@ -117,7 +117,7 @@ namespace Services
             List<FileResponse> fileResponses = _fileDetailsList.Select(f => f.ToFileResponse()).ToList();
             for (int i = 0; i < fileResponses.Count; i++)
             {
-                fileResponses[i].VirualFolderName = _virtualFolderList.FirstOrDefault(f => f.Id == fileResponses[i].Id)?.FolderName ?? "";
+                fileResponses[i].VirualFolderName = _virtualFolderList.FirstOrDefault(f => f.Id == fileResponses[i].VirualFolderId)?.FolderName ?? "";
             }
             return fileResponses;
         }
