@@ -11,9 +11,11 @@ namespace FileStorageCoreApp.Controllers
     public class FileController : Controller
     {
         IFileService _fileDetailsService;
-        public FileController(IFileService fileDetailsService)
+        IVirtualFolderService _virtualFolderService;
+        public FileController(IFileService fileDetailsService, IVirtualFolderService virtualFolderService)
         {
             _fileDetailsService = fileDetailsService;
+            _virtualFolderService = virtualFolderService;
         }
         [Route("Index")]
         [Route("/")]
@@ -119,7 +121,7 @@ namespace FileStorageCoreApp.Controllers
                 Id = fileResponse.Id,
                 FileName = fileResponse.FileName,
                 FilePath = fileResponse.FilePath,
-                VirtualFolder = fileResponse.VirtualFolder
+                VirualFolderId = fileResponse.VirualFolderId
             };
 
             return View(fileRenameRequest);
@@ -135,6 +137,36 @@ namespace FileStorageCoreApp.Controllers
                 return RedirectToAction("Index", "File");
             }
             _fileDetailsService.RenameFile(fileInputResponse);
+            return RedirectToAction("Index", "File");
+        }
+
+        [Route("MoveToFolder/{fileID}")]
+        [HttpGet]
+        public async Task<IActionResult> MoveToFolder(Guid fileID)
+        {
+            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileID);
+            ViewBag.VirtualFolders = (await _virtualFolderService.GetAllFolders()).Select(temp => new SelectListItem() { Text = temp.FolderName, Value = temp.Id.ToString() });
+            if (fileResponse == null)
+            {
+                return RedirectToAction("Index", "File");
+            }
+            FileToFolderRequest fileToFolderRequest = new FileToFolderRequest
+            {
+                Id = fileResponse.Id,
+                VirualFolderId = fileResponse.VirualFolderId
+            };
+            return View(fileToFolderRequest);
+        }
+
+        [Route("MoveToFolder/{fileID}")]
+        [HttpPost]
+        public async Task<IActionResult> MoveToFolder(FileToFolderRequest fileToFolderRequest)
+        {
+            if (fileToFolderRequest == null)
+            {
+                return RedirectToAction("Index", "File");
+            }
+            FileResponse? fileResponse = _fileDetailsService.MoveToFolder(fileToFolderRequest);
             return RedirectToAction("Index", "File");
         }
     }

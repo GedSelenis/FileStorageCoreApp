@@ -6,7 +6,7 @@
 <a asp-controller="File" asp-action="Index" class="link-hover">Back to Persons List</a>
 
 <div>
-    <form asp-controller="File" asp-action="Create" method="post">
+	<form asp-controller="File" asp-action="AddFile" method="post">
 
         @*File path*@
 		<div class="form-field flex">
@@ -36,12 +36,12 @@
 		@*File Folder*@
 		<div class="form-field flex">
 			<div class="w-25">
-				<label for="VirtualFolder" class="form-label pt">Virtual Folder</label>
+				<label for="VirualFolderId" class="form-label pt">Virtual Folder ID</label>
 			</div>
 			<div class="flex-1">
 				<div class="flex-1">
-					<input asp-for="VirtualFolder" class="form-input" />
-					<span asp-validation-for="VirtualFolder" class="text-red"></span>
+					<input asp-for="VirualFolderId" class="form-input" />
+					<span asp-validation-for="VirualFolderId" class="text-red"></span>
 				</div>
 			</div>
 		</div>

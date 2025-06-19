@@ -15,9 +15,25 @@ namespace Services
     public class FileDetailsService : IFileService
     {
         List<FileDetails> _fileDetailsList = new List<FileDetails>();
+        List<VirtualFolder> _virtualFolderList = new List<VirtualFolder>();
         public FileDetailsService()
         {
             _fileDetailsList = ReadXmlFile();
+            _virtualFolderList = ReadStoredFoldersXmlFile();
+        }
+
+        List<VirtualFolder> ReadStoredFoldersXmlFile()
+        {
+            List<VirtualFolder> fileDetails = new List<VirtualFolder>();
+            StreamReader file = new StreamReader("StoredFolders.xml");
+            string xmlContent = file.ReadToEnd();
+            file.Close();
+            XmlSerializer serializer = new XmlSerializer(typeof(List<VirtualFolder>));
+            using (TextReader reader = new StringReader(xmlContent))
+            {
+                fileDetails = (List<VirtualFolder>)serializer.Deserialize(reader);
+            }
+            return fileDetails;
         }
 
         List<FileDetails> ReadXmlFile()
@@ -99,6 +115,10 @@ namespace Services
         {
             _fileDetailsList = ReadXmlFile();
             List<FileResponse> fileResponses = _fileDetailsList.Select(f => f.ToFileResponse()).ToList();
+            for (int i = 0; i < fileResponses.Count; i++)
+            {
+                fileResponses[i].VirualFolderName = _virtualFolderList.FirstOrDefault(f => f.Id == fileResponses[i].Id)?.FolderName ?? "";
+            }
             return fileResponses;
         }
 
@@ -114,12 +134,12 @@ namespace Services
             {
                 throw new KeyNotFoundException($"File with ID {fileRenameRequest.Id} not found.");
             }
-            if (_fileDetailsList.Any(f => f.FileName == fileRenameRequest.NewFileName && f.VirtualFolder == fileRenameRequest.VirtualFolder))
+            if (_fileDetailsList.Any(f => f.FileName == fileRenameRequest.NewFileName && f.VirualFolderId == fileRenameRequest.VirualFolderId))
             {
                 for (int i = 0; i < 100; i++)
                 {
                     string newFileName = $"{fileRenameRequest.NewFileName.Split('.')[0]} ({i}).{fileRenameRequest.NewFileName.Split('.')[1]}";
-                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirtualFolder == fileRenameRequest.VirtualFolder))
+                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirualFolderId == fileRenameRequest.VirualFolderId))
                     {
                         fileRenameRequest.NewFileName = newFileName;
                         break;
@@ -149,12 +169,12 @@ namespace Services
             }
             ValidationHelper.ModelValidation(fileAddRequest);
             FileDetails fileDetails = fileAddRequest.ToFileDetails();
-            if (_fileDetailsList.Any(f => f.FileName == fileAddRequest.FileName && f.VirtualFolder == fileAddRequest.VirtualFolder))
+            if (_fileDetailsList.Any(f => f.FileName == fileAddRequest.FileName && f.VirualFolderId == fileAddRequest.VirualFolderId))
             {
                 for (int i = 0; i < 100; i++)
                 {
                     string newFileName = $"{fileAddRequest.FileName.Split('.')[0]} ({i}).{fileAddRequest.FileName.Split('.')[1]}";
-                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirtualFolder == fileAddRequest.VirtualFolder))
+                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirualFolderId == fileAddRequest.VirualFolderId))
                     {
                         fileDetails.FileName = newFileName;
                         break;
@@ -202,6 +222,39 @@ namespace Services
         FileResponse? IFileService.GetFileDetails(Guid? fileId)
         {
             return GetFileDetails(fileId);
+        }
+
+        public FileResponse MoveToFolder(FileToFolderRequest moveToFolderRequest)
+        {
+            if (moveToFolderRequest == null)
+            {
+                throw new ArgumentNullException(nameof(moveToFolderRequest), "FileToFolderRequest cannot be null.");
+            }
+            ValidationHelper.ModelValidation(moveToFolderRequest);
+            FileDetails? fileDetails = _fileDetailsList.FirstOrDefault(f => f.Id == moveToFolderRequest.Id);
+            if (fileDetails == null)
+            {
+                throw new KeyNotFoundException($"File with ID {moveToFolderRequest.Id} not found.");
+            }
+            if (_fileDetailsList.Any(f => f.FileName == fileDetails.FileName && f.VirualFolderId == moveToFolderRequest.VirualFolderId))
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    string newFileName = $"{fileDetails.FileName.Split('.')[0]} ({i}).{fileDetails.FileName.Split('.')[1]}";
+                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirualFolderId == moveToFolderRequest.VirualFolderId))
+                    {
+                        fileDetails.FileName = newFileName;
+                        break;
+                    }
+                    else if (i == 99)
+                    {
+                        throw new InvalidOperationException("Unable to generate a unique file name after 100 attempts.");
+                    }
+                }
+            }
+            fileDetails.VirualFolderId = moveToFolderRequest.VirualFolderId;
+            WriteXmlFile(_fileDetailsList);
+            return fileDetails.ToFileResponse();
         }
     }
 }

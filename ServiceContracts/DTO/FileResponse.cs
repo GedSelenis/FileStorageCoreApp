@@ -12,7 +12,8 @@ namespace ServiceContracts.DTO
         public Guid Id { get; set; }
         public string FileName { get; set; }
         public string FilePath { get; set; }
-        public string VirtualFolder { get; set; }
+        public Guid? VirualFolderId { get; set; }
+        public string? VirualFolderName { get; set; }
         public FileResponse()
         {
             FileName = string.Empty;
@@ -21,7 +22,7 @@ namespace ServiceContracts.DTO
 
         public FileDetails ToFileDetails()
         {
-            return new FileDetails(FileName, FilePath, VirtualFolder);
+            return new FileDetails(FileName, FilePath, VirualFolderId.Value);
         }
     }
 
@@ -34,7 +35,7 @@ namespace ServiceContracts.DTO
                 Id = fileDetails.Id,
                 FileName = fileDetails.FileName,
                 FilePath = fileDetails.FilePath,
-                VirtualFolder = fileDetails.VirtualFolder,
+                VirualFolderId = fileDetails.VirualFolderId,
             };
         }
     }

@@ -79,7 +79,7 @@ namespace FileStorageCoreApp.Controllers
             fileInputResponse.FilePath = fileResponse.FilePath;
             fileInputResponse.FileName = fileResponse.FileName;
             fileInputResponse.Id = fileID;
-            fileInputResponse.VirtualFolder = fileResponse.VirtualFolder;
+            fileInputResponse.VirualFolderId = fileResponse.VirualFolderId;
             FileResponse response = _fileDetailsService.RenameFile(fileInputResponse);
             return Json(response);
         }

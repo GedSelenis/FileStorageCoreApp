@@ -4,36 +4,36 @@
     <Id>4b542f7c-c1b6-41ab-9676-8088d1bb24fe</Id>
     <FileName>Test5.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirtualFolder>Folder1</VirtualFolder>
+    <VirualFolderId xsi:nil="true" />
   </FileDetails>
   <FileDetails>
     <Id>ab1e3f56-a66c-4689-a97f-6b9d886f8943</Id>
     <FileName>Test5 (0).txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirtualFolder>Folder1</VirtualFolder>
+    <VirualFolderId xsi:nil="true" />
   </FileDetails>
   <FileDetails>
     <Id>7ca4640a-0789-4aef-a35d-d4ac6d4788d5</Id>
     <FileName>Test1.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirtualFolder>Folder1</VirtualFolder>
+    <VirualFolderId>a37a74a8-25eb-48bc-9f09-c1062c2fbfed</VirualFolderId>
   </FileDetails>
   <FileDetails>
     <Id>f49b9fef-cee6-40b3-8afa-5f31c92186b3</Id>
     <FileName>Test2.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirtualFolder>Folder1</VirtualFolder>
+    <VirualFolderId xsi:nil="true" />
   </FileDetails>
   <FileDetails>
     <Id>e566e817-d99d-4de9-be30-d9c1d74bc91a</Id>
     <FileName>Test3.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirtualFolder>Folder1</VirtualFolder>
+    <VirualFolderId xsi:nil="true" />
   </FileDetails>
   <FileDetails>
     <Id>809083c4-8233-4241-823e-26a3231288da</Id>
     <FileName>Info1.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirtualFolder>Folder1</VirtualFolder>
+    <VirualFolderId xsi:nil="true" />
   </FileDetails>
 </ArrayOfFileDetails>

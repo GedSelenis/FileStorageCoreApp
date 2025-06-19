@@ -23,11 +23,12 @@
             <tr>
                 <td>@file.FileName</td>
                 <td>@file.FilePath</td>
-                <td>@file.VirtualFolder</td>
+                <td>@file.VirualFolderName</td>
                 <td>
                     <a asp-controller="File" asp-action="Delete" asp-route-fileID="@file.Id" class="link-hover">Delete</a>
                     <a asp-controller="File" asp-action="AddText" asp-route-fileID="@file.Id" class="link-hover">Add text</a>
                     <a asp-controller="File" asp-action="Rename" asp-route-fileID="@file.Id" class="link-hover">Rename file</a>
+                    <a asp-controller="File" asp-action="MoveToFolder" asp-route-fileID="@file.Id" class="link-hover">Move</a>
                 </td>
             </tr>
         }

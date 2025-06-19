@@ -11,13 +11,13 @@ namespace Entities
         public Guid Id { get; set; }
         public string FileName { get; set; }
         public string FilePath { get; set; }
-        public string VirtualFolder { get; set; }
+        public Guid? VirualFolderId { get; set; }
 
-        public FileDetails(string fileName, string filePath, string virualFolder)
+        public FileDetails(string fileName, string filePath, Guid virualFolder)
         {
             this.FileName = fileName;
             this.FilePath = filePath;
-            this.VirtualFolder = virualFolder;
+            this.VirualFolderId = virualFolder;
             this.Id = Guid.NewGuid();
         }
         public FileDetails(Guid id, string fileName, string filePath)
@@ -26,12 +26,12 @@ namespace Entities
             this.FilePath = filePath;
             this.Id = id;
         }
-        public FileDetails(Guid id, string fileName, string filePath, string virualFolder)
+        public FileDetails(Guid id, string fileName, string filePath, Guid virualFolder)
         {
             this.FileName = fileName;
             this.FilePath = filePath;
             this.Id = id;
-            this.VirtualFolder = virualFolder;
+            this.VirualFolderId = virualFolder;
         }
         public FileDetails()
         {

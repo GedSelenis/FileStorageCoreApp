@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+ </head>
+<body>
+    <div class="container">
+        <div>
+            <ul>
+                <li>
+                    <a asp-controller="File" asp-action="Index" class="link-hover">Files</a>
+                </li>
+                <li>
+                    <a asp-controller="Folder" asp-action="Index" class="link-hover">Folder</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-content">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>

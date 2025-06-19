@@ -15,5 +15,6 @@ namespace ServiceContracts
         public bool DeleteFile(Guid? fileId);
         public List<FileResponse> ListFiles();
         public FileResponse? GetFileDetails(Guid? fileId);
+        public FileResponse MoveToFolder(FileToFolderRequest moveToFolderRequest);
     }
 }

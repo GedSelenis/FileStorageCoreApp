@@ -1,0 +1,29 @@
+﻿@model IEnumerable<FolderResponse>
+@{
+    ViewBag.Title = "File List";
+}
+
+
+<h1>Files</h1>
+
+<a asp-controller="Folder" asp-action="AddFolder" class="link-hover">Add Folder</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Folder Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var folder in Model)
+        {
+            <tr>
+                <td>@folder.FolderName</td>
+                <td>
+                    <a asp-controller="Folder" asp-action="Delete" asp-route-folderID="@folder.Id" class="link-hover">Delete</a>
+                    <a asp-controller="Folder" asp-action="UpdateFolder" asp-route-folderID="@folder.Id" class="link-hover">Update</a>
+                </td>
+            </tr>
+        }
+    </tbody>
