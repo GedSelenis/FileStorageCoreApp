@@ -13,11 +13,10 @@ namespace ServiceContracts.DTO
         public string FileName { get; set; }
         public string FilePath { get; set; }
         public string NewFileName { get; set; }
-        public Guid? VirualFolderId { get; set; }
 
         public FileDetails ToFileDetails()
         {
-            return new FileDetails(Id, FileName, FilePath, VirualFolderId.Value);
+            return new FileDetails(Id, FileName, FilePath);
         }
     }
 }

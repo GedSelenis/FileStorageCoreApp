@@ -148,12 +148,12 @@ namespace Services
             {
                 throw new KeyNotFoundException($"File with ID {fileRenameRequest.Id} not found.");
             }
-            if (_fileDetailsList.Any(f => f.FileName == fileRenameRequest.NewFileName && f.VirualFolderId == fileRenameRequest.VirualFolderId))
+            if (_fileDetailsList.Any(f => f.FileName == fileRenameRequest.NewFileName && f.VirualFolderId == fileDetails.VirualFolderId))
             {
                 for (int i = 0; i < 100; i++)
                 {
                     string newFileName = $"{fileRenameRequest.NewFileName.Split('.')[0]} ({i}).{fileRenameRequest.NewFileName.Split('.')[1]}";
-                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirualFolderId == fileRenameRequest.VirualFolderId))
+                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirualFolderId == fileDetails.VirualFolderId))
                     {
                         fileRenameRequest.NewFileName = newFileName;
                         break;

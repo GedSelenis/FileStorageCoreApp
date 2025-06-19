@@ -7,22 +7,10 @@
     <VirualFolderId>a37a74a8-25eb-48bc-9f09-c1062c2fbfed</VirualFolderId>
   </FileDetails>
   <FileDetails>
-    <Id>ab1e3f56-a66c-4689-a97f-6b9d886f8943</Id>
-    <FileName>Test5 (0).txt</FileName>
-    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirualFolderId>a37a74a8-25eb-48bc-9f09-c1062c2fbfed</VirualFolderId>
-  </FileDetails>
-  <FileDetails>
     <Id>7ca4640a-0789-4aef-a35d-d4ac6d4788d5</Id>
     <FileName>Test1.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
     <VirualFolderId>a37a74a8-25eb-48bc-9f09-c1062c2fbfed</VirualFolderId>
-  </FileDetails>
-  <FileDetails>
-    <Id>f49b9fef-cee6-40b3-8afa-5f31c92186b3</Id>
-    <FileName>Test2 (0).txt</FileName>
-    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
-    <VirualFolderId>68fe105d-735c-4e77-88ed-0d5c7f46d510</VirualFolderId>
   </FileDetails>
   <FileDetails>
     <Id>e566e817-d99d-4de9-be30-d9c1d74bc91a</Id>
@@ -33,6 +21,18 @@
   <FileDetails>
     <Id>809083c4-8233-4241-823e-26a3231288da</Id>
     <FileName>Info1.txt</FileName>
+    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirualFolderId>68fe105d-735c-4e77-88ed-0d5c7f46d510</VirualFolderId>
+  </FileDetails>
+  <FileDetails>
+    <Id>ab1e3f56-a66c-4689-a97f-6b9d886f8943</Id>
+    <FileName>Test6.txt</FileName>
+    <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
+    <VirualFolderId>a37a74a8-25eb-48bc-9f09-c1062c2fbfed</VirualFolderId>
+  </FileDetails>
+  <FileDetails>
+    <Id>f49b9fef-cee6-40b3-8afa-5f31c92186b3</Id>
+    <FileName>Test2.txt</FileName>
     <FilePath>C:\Users\Gediminas.Selenis\Downloads</FilePath>
     <VirualFolderId>68fe105d-735c-4e77-88ed-0d5c7f46d510</VirualFolderId>
   </FileDetails>
