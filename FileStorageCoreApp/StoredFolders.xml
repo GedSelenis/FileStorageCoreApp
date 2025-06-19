@@ -15,4 +15,9 @@
     <ParentFolderId xsi:nil="true" />
     <FolderName>Folder2</FolderName>
   </VirtualFolder>
+  <VirtualFolder>
+    <Id>7bcb3a7f-182e-444c-97ba-88319a1fa895</Id>
+    <ParentFolderId xsi:nil="true" />
+    <FolderName>Folder4</FolderName>
+  </VirtualFolder>
 </ArrayOfVirtualFolder>

@@ -89,7 +89,7 @@ namespace FileStorageCoreApp.Controllers
 
         [Route("MoveToFolder")]
         [HttpPost]
-        public async Task<IActionResult> MoveToFolder([FromBody] FileToFolderRequest fileToFolderRequest)
+        public async Task<IActionResult> MoveToFolder([FromForm] FileToFolderRequest fileToFolderRequest)
         {
             if (fileToFolderRequest == null)
             {
@@ -110,7 +110,7 @@ namespace FileStorageCoreApp.Controllers
 
         [Route("AddFolder")]
         [HttpPost]
-        public async Task<IActionResult> AddFolder([FromBody] FolderAddRequest folderAddRequest)
+        public async Task<IActionResult> AddFolder([FromForm] FolderAddRequest folderAddRequest)
         {
             if (folderAddRequest == null)
             {
@@ -143,7 +143,7 @@ namespace FileStorageCoreApp.Controllers
 
         [Route("UpdateFolder")]
         [HttpPost]
-        public async Task<IActionResult> UpdateFolder([FromBody] FolderUpdateRequest folderUpdateRequest)
+        public async Task<IActionResult> UpdateFolder([FromForm] FolderUpdateRequest folderUpdateRequest)
         {
             if (folderUpdateRequest == null)
             {
@@ -160,7 +160,7 @@ namespace FileStorageCoreApp.Controllers
 
         [Route("MoveFolderToFolder")]
         [HttpPost]
-        public async Task<IActionResult> MoveFolderToFolder([FromBody] FolderToFolderRequest folderToFolderRequest)
+        public async Task<IActionResult> MoveFolderToFolder([FromForm] FolderToFolderRequest folderToFolderRequest)
         {
             if (folderToFolderRequest == null)
             {
