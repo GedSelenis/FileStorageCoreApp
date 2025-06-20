@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using ServiceContracts;
 using ServiceContracts.DTO;
@@ -14,12 +15,12 @@ namespace Services
 {
     public class FileDetailsService : IFileService
     {
-        List<FileDetails> _fileDetailsList = new List<FileDetails>();
-        List<VirtualFolder> _virtualFolderList = new List<VirtualFolder>();
-        public FileDetailsService()
+        ApplicationDbContext _db;
+        //List<FileDetails> _fileDetailsList = new List<FileDetails>();
+        //List<VirtualFolder> _virtualFolderList = new List<VirtualFolder>();
+        public FileDetailsService(ApplicationDbContext applicationDbContext)
         {
-            _fileDetailsList = ReadXmlFile();
-            _virtualFolderList = ReadStoredFoldersXmlFile();
+            _db = applicationDbContext;
         }
 
         List<VirtualFolder> ReadStoredFoldersXmlFile()
@@ -75,7 +76,7 @@ namespace Services
             return fileDetails.ToFileResponse();
         }
 
-        bool DeleteFile(Guid? fileId)
+        async Task<bool> DeleteFile(Guid? fileId)
         {
             if (fileId == null || fileId == Guid.Empty)
             {
@@ -95,8 +96,8 @@ namespace Services
                 throw new IOException($"Error deleting file: {ex.Message}", ex);
             }
 
-            _fileDetailsList.RemoveAll(f => f.Id == fileId);
-            WriteXmlFile(_fileDetailsList);
+            _db.FileDetails.RemoveRange(_db.FileDetails.Where(f => f.Id == fileId));
+            await _db.SaveChangesAsync();
 
             return true;
         }
@@ -107,27 +108,26 @@ namespace Services
             {
                 throw new ArgumentException("File ID cannot be empty or null.", nameof(fileId));
             }
-            FileDetails? fileDetails = _fileDetailsList.Where(f => f.Id == fileId).FirstOrDefault();
+            FileDetails? fileDetails = _db.FileDetails.Where(f => f.Id == fileId).FirstOrDefault();
             return fileDetails?.ToFileResponse() ?? null;
         }
 
-        List<FileResponse> ListFilesAsync()
+        async Task<List<FileResponse>> ListFilesAsync()
         {
-            _fileDetailsList = ReadXmlFile();
-            _virtualFolderList = ReadStoredFoldersXmlFile();
-            List<FileResponse> fileResponses = _fileDetailsList.Select(f => f.ToFileResponse()).ToList();
+            var files = await _db.FileDetails.Include("VirtualFolder").ToListAsync();
+            List<FileResponse> fileResponses = files.Select(f => f.ToFileResponse()).ToList();
             for (int i = 0; i < fileResponses.Count; i++)
             {
                 string virtualFoderPath = "";
-                VirtualFolder? virtualFolder = _virtualFolderList.FirstOrDefault(f => f.Id == fileResponses[i].VirualFolderId);
+                VirtualFolder? virtualFolder = _db.VirtualFolders.FirstOrDefault(f => f.Id == fileResponses[i].VirualFolderId);
                 virtualFoderPath = virtualFolder?.FolderName ?? "";
                 if (virtualFolder != null && virtualFolder.ParentFolderId != null)
                 {
-                    VirtualFolder? parentFolder = _virtualFolderList.FirstOrDefault(f => f.Id == virtualFolder.ParentFolderId);
+                    VirtualFolder? parentFolder = _db.VirtualFolders.FirstOrDefault(f => f.Id == virtualFolder.ParentFolderId);
                     while (parentFolder != null)
                     {
                         virtualFoderPath = Path.Combine(parentFolder.FolderName, virtualFoderPath);
-                        parentFolder = _virtualFolderList.FirstOrDefault(f => f.Id == parentFolder.ParentFolderId);
+                        parentFolder = _db.VirtualFolders.FirstOrDefault(f => f.Id == parentFolder.ParentFolderId);
                     }
                 }
 
@@ -136,24 +136,24 @@ namespace Services
             return fileResponses;
         }
 
-        FileResponse RenameFile(FileRenameRequest fileRenameRequest)
+        async Task<FileResponse> RenameFile(FileRenameRequest fileRenameRequest)
         {
             if (fileRenameRequest == null)
             {
                 throw new ArgumentNullException(nameof(fileRenameRequest), "FileRenameRequest cannot be null.");
             }
             ValidationHelper.ModelValidation(fileRenameRequest);
-            FileDetails? fileDetails = _fileDetailsList.Where(f => f.Id == fileRenameRequest.Id).FirstOrDefault();
+            FileDetails? fileDetails = _db.FileDetails.Where(f => f.Id == fileRenameRequest.Id).FirstOrDefault();
             if (fileDetails == null)
             {
                 throw new KeyNotFoundException($"File with ID {fileRenameRequest.Id} not found.");
             }
-            if (_fileDetailsList.Any(f => f.FileName == fileRenameRequest.NewFileName && f.VirualFolderId == fileDetails.VirualFolderId))
+            if (_db.FileDetails.Any(f => f.FileName == fileRenameRequest.NewFileName && f.VirualFolderId == fileDetails.VirualFolderId))
             {
                 for (int i = 0; i < 100; i++)
                 {
                     string newFileName = $"{fileRenameRequest.NewFileName.Split('.')[0]} ({i}).{fileRenameRequest.NewFileName.Split('.')[1]}";
-                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirualFolderId == fileDetails.VirualFolderId))
+                    if (!_db.FileDetails.Any(f => f.FileName == newFileName && f.VirualFolderId == fileDetails.VirualFolderId))
                     {
                         fileRenameRequest.NewFileName = newFileName;
                         break;
@@ -167,15 +167,13 @@ namespace Services
             string oldFilePath = Path.Combine(fileDetails.FilePath, fileDetails.FileName);
             string newFilePath = Path.Combine(fileDetails.FilePath, fileRenameRequest.NewFileName);
             File.Move(oldFilePath, newFilePath);
-            _fileDetailsList.RemoveAll(file => file.Id == fileDetails.Id);
             fileDetails.FileName = fileRenameRequest.NewFileName;
             fileDetails.FilePath = fileDetails.FilePath;
-            _fileDetailsList.Add(fileDetails);
-            WriteXmlFile(_fileDetailsList);
+            await _db.SaveChangesAsync();
             return fileDetails.ToFileResponse();
         }
 
-        FileResponse AddFile(FileAddRequest fileAddRequest)
+        async Task<FileResponse> AddFile(FileAddRequest fileAddRequest)
         {
             if (fileAddRequest == null)
             {
@@ -183,12 +181,12 @@ namespace Services
             }
             ValidationHelper.ModelValidation(fileAddRequest);
             FileDetails fileDetails = fileAddRequest.ToFileDetails();
-            if (_fileDetailsList.Any(f => f.FileName == fileAddRequest.FileName && f.VirualFolderId == fileAddRequest.VirualFolderId))
+            if (_db.FileDetails.Any(f => f.FileName == fileAddRequest.FileName && f.VirualFolderId == fileAddRequest.VirualFolderId))
             {
                 for (int i = 0; i < 100; i++)
                 {
                     string newFileName = $"{fileAddRequest.FileName.Split('.')[0]} ({i}).{fileAddRequest.FileName.Split('.')[1]}";
-                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirualFolderId == fileAddRequest.VirualFolderId))
+                    if (!_db.FileDetails.Any(f => f.FileName == newFileName && f.VirualFolderId == fileAddRequest.VirualFolderId))
                     {
                         fileDetails.FileName = newFileName;
                         break;
@@ -203,17 +201,17 @@ namespace Services
             {
                 File.Create(Path.Combine(fileDetails.FilePath, fileDetails.FileName)).Dispose();
             }
-            _fileDetailsList.Add(fileDetails);
-            WriteXmlFile(_fileDetailsList);
+            _db.FileDetails.Add(fileDetails);
+            await _db.SaveChangesAsync();
             return fileDetails.ToFileResponse();
         }
 
-        FileResponse IFileService.AddFile(FileAddRequest fileAddRequest)
+        async Task<FileResponse> IFileService.AddFile(FileAddRequest fileAddRequest)
         {
-            return AddFile(fileAddRequest);
+            return await AddFile(fileAddRequest);
         }
 
-        FileResponse IFileService.RenameFile(FileRenameRequest fileRenameRequest)
+        Task<FileResponse> IFileService.RenameFile(FileRenameRequest fileRenameRequest)
         {
             return RenameFile(fileRenameRequest);
         }
@@ -223,14 +221,14 @@ namespace Services
             return AddTextToFileAsync(fileAddTextToFileRequest);
         }
 
-        bool IFileService.DeleteFile(Guid? fileId)
+        async Task<bool> IFileService.DeleteFile(Guid? fileId)
         {
-            return DeleteFile(fileId);
+            return await DeleteFile(fileId);
         }
 
-        List<FileResponse> IFileService.ListFiles()
+        async Task<List<FileResponse>> IFileService.ListFiles()
         {
-            return ListFilesAsync();
+            return await ListFilesAsync();
         }
 
         FileResponse? IFileService.GetFileDetails(Guid? fileId)
@@ -238,14 +236,14 @@ namespace Services
             return GetFileDetails(fileId);
         }
 
-        public FileResponse MoveToFolder(FileToFolderRequest moveToFolderRequest)
+        public async Task<FileResponse> MoveToFolder(FileToFolderRequest moveToFolderRequest)
         {
             if (moveToFolderRequest == null)
             {
                 throw new ArgumentNullException(nameof(moveToFolderRequest), "FileToFolderRequest cannot be null.");
             }
             ValidationHelper.ModelValidation(moveToFolderRequest);
-            FileDetails? fileDetails = _fileDetailsList.FirstOrDefault(f => f.Id == moveToFolderRequest.Id);
+            FileDetails? fileDetails = _db.FileDetails.FirstOrDefault(f => f.Id == moveToFolderRequest.Id);
             if (fileDetails == null)
             {
                 throw new KeyNotFoundException($"File with ID {moveToFolderRequest.Id} not found.");
@@ -254,12 +252,12 @@ namespace Services
             {
                 throw new InvalidOperationException("File is already in the specified folder.");
             }
-            if (_fileDetailsList.Any(f => f.FileName == fileDetails.FileName && f.VirualFolderId == moveToFolderRequest.VirualFolderId))
+            if (_db.FileDetails.Any(f => f.FileName == fileDetails.FileName && f.VirualFolderId == moveToFolderRequest.VirualFolderId))
             {
                 for (int i = 0; i < 100; i++)
                 {
                     string newFileName = $"{fileDetails.FileName.Split('.')[0]} ({i}).{fileDetails.FileName.Split('.')[1]}";
-                    if (!_fileDetailsList.Any(f => f.FileName == newFileName && f.VirualFolderId == moveToFolderRequest.VirualFolderId))
+                    if (!_db.FileDetails.Any(f => f.FileName == newFileName && f.VirualFolderId == moveToFolderRequest.VirualFolderId))
                     {
                         fileDetails.FileName = newFileName;
                         break;
@@ -271,7 +269,7 @@ namespace Services
                 }
             }
             fileDetails.VirualFolderId = moveToFolderRequest.VirualFolderId;
-            WriteXmlFile(_fileDetailsList);
+            await _db.SaveChangesAsync();
             return fileDetails.ToFileResponse();
         }
     }

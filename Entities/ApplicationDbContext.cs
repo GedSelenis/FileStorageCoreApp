@@ -21,6 +21,4 @@ namespace Entities
             modelBuilder.Entity<VirtualFolder>().ToTable("VirtualFolders");
         }
     }
-    {
-    }
 }

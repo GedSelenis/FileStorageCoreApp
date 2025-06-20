@@ -2,6 +2,7 @@
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services;
+using System.Threading.Tasks;
 
 namespace FileStorageCoreApp.Controllers
 {
@@ -19,14 +20,14 @@ namespace FileStorageCoreApp.Controllers
 
         [Route("Index")]
         [HttpPost]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<FileResponse> files = _fileDetailsService.ListFiles();
+            List<FileResponse> files = await _fileDetailsService.ListFiles();
             return Json(files);
         }
         [Route("AddFile")]
         [HttpPost]
-        public IActionResult AddFile(FileAddRequest fileAddRequest)
+        public async Task<IActionResult> AddFile(FileAddRequest fileAddRequest)
         {
             if (fileAddRequest == null)
             {
@@ -37,7 +38,7 @@ namespace FileStorageCoreApp.Controllers
                 var Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return BadRequest(Errors);
             }
-            FileResponse fileResponse = _fileDetailsService.AddFile(fileAddRequest);
+            FileResponse fileResponse = await _fileDetailsService.AddFile(fileAddRequest);
             return Json(fileResponse);
         }
 
@@ -82,7 +83,7 @@ namespace FileStorageCoreApp.Controllers
             fileInputResponse.FilePath = fileResponse.FilePath;
             fileInputResponse.FileName = fileResponse.FileName;
             fileInputResponse.Id = fileID;
-            FileResponse response = _fileDetailsService.RenameFile(fileInputResponse);
+            FileResponse response = await _fileDetailsService.RenameFile(fileInputResponse);
             return Json(response);
         }
 
@@ -94,7 +95,7 @@ namespace FileStorageCoreApp.Controllers
             {
                 throw new ArgumentNullException(nameof(fileToFolderRequest), "FileToFolderRequest cannot be null.");
             }
-            FileResponse? fileResponse = _fileDetailsService.MoveToFolder(fileToFolderRequest);
+            FileResponse? fileResponse = await _fileDetailsService.MoveToFolder(fileToFolderRequest);
             return Json(fileResponse);
         }
 

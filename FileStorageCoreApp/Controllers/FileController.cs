@@ -22,7 +22,7 @@ namespace FileStorageCoreApp.Controllers
         [Route("/")]
         public async Task<IActionResult> Index()
         {
-            List<FileResponse> files = _fileDetailsService.ListFiles();
+            List<FileResponse> files = await _fileDetailsService.ListFiles();
             ViewBag.VirtualFolders = await _virtualFolderService.GetAllFolders();
             return View(files);
         }
@@ -37,7 +37,7 @@ namespace FileStorageCoreApp.Controllers
 
         [Route("AddFile")]
         [HttpPost]
-        public IActionResult AddFile(FileAddRequest fileAddRequest)
+        public async Task<IActionResult> AddFile(FileAddRequest fileAddRequest)
         {
             if (fileAddRequest == null)
             {
@@ -48,7 +48,7 @@ namespace FileStorageCoreApp.Controllers
                 ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return View();
             }
-            FileResponse fileResponse = _fileDetailsService.AddFile(fileAddRequest);
+            FileResponse fileResponse = await _fileDetailsService.AddFile(fileAddRequest);
             return RedirectToAction("Index","File");
         }
 
@@ -168,7 +168,7 @@ namespace FileStorageCoreApp.Controllers
             {
                 return RedirectToAction("Index", "File");
             }
-            FileResponse? fileResponse = _fileDetailsService.MoveToFolder(fileToFolderRequest);
+            FileResponse? fileResponse = await _fileDetailsService.MoveToFolder(fileToFolderRequest);
             return RedirectToAction("Index", "File");
         }
     }

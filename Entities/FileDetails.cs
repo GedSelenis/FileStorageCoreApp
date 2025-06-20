@@ -20,7 +20,7 @@ namespace Entities
         [ForeignKey("VirualFolderId")]
         public VirtualFolder? VirtualFolder { get; set; }
 
-        public FileDetails(string fileName, string filePath, Guid virualFolder)
+        public FileDetails(string fileName, string filePath, Guid? virualFolder)
         {
             this.FileName = fileName;
             this.FilePath = filePath;

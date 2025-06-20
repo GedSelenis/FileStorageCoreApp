@@ -28,7 +28,7 @@ namespace ServiceContracts.DTO
 
         public FileDetails ToFileDetails()
         {
-            return new FileDetails(FileName, FilePath, VirualFolderId.Value);
+            return new FileDetails(FileName, FilePath, VirualFolderId);
         }
     }
 }
