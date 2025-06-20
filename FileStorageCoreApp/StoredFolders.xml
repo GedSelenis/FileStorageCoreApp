@@ -20,4 +20,9 @@
     <ParentFolderId xsi:nil="true" />
     <FolderName>Folder4</FolderName>
   </VirtualFolder>
+  <VirtualFolder>
+    <Id>22b68849-6003-4c60-89f0-227738600949</Id>
+    <ParentFolderId>ae10b030-1231-4c4a-ae95-5256438ee662</ParentFolderId>
+    <FolderName>InnerFolder2</FolderName>
+  </VirtualFolder>
 </ArrayOfVirtualFolder>
