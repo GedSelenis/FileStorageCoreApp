@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services.Helpers;
@@ -13,11 +14,12 @@ namespace Services
 {
     public class VirtualFolderService : IVirtualFolderService
     {
-        List<VirtualFolder> _virtualFolderList = new List<VirtualFolder>();
+        ApplicationDbContext _db;
+        //List<VirtualFolder> _virtualFolderList = new List<VirtualFolder>();
 
-        public VirtualFolderService()
+        public VirtualFolderService(ApplicationDbContext applicationDbContext)
         {
-            _virtualFolderList = ReadXmlFile();
+            _db = applicationDbContext;
         }
 
         List<VirtualFolder> ReadXmlFile()
@@ -48,15 +50,15 @@ namespace Services
                 throw new ArgumentException("Folder name cannot be null.");
             }
             ValidationHelper.ModelValidation(folderAddRequest);
-            if (_virtualFolderList.Any(x => x.FolderName == folderAddRequest.FolderName))
+            if (_db.VirtualFolders.Any(x => x.FolderName == folderAddRequest.FolderName))
             {
                 throw new ArgumentException("Folder with the same name already exists.");
             }
 
             VirtualFolder virtualFolder = folderAddRequest.ToVirtualFolder();
             virtualFolder.Id = Guid.NewGuid();
-            _virtualFolderList.Add(virtualFolder);
-            WriteXmlFile(_virtualFolderList);
+            _db.VirtualFolders.Add(virtualFolder);
+            await _db.SaveChangesAsync();
 
             return virtualFolder.ToFolderResponse();
         }
@@ -67,20 +69,28 @@ namespace Services
             {
                 throw new ArgumentException("Folder ID cannot be empty.");
             }
-            VirtualFolder folderToDelete = _virtualFolderList.FirstOrDefault(x => x.Id == id);
+            VirtualFolder? folderToDelete = _db.VirtualFolders.FirstOrDefault(x => x.Id == id);
             if (folderToDelete == null)
             {
                 return false;
             }
-            _virtualFolderList.RemoveAll(f => f.Id == id);
-            WriteXmlFile(_virtualFolderList);
-            return true;
+            _db.RemoveRange(_db.VirtualFolders.Where(f => f.Id == id));
+            int affectedRows = await _db.SaveChangesAsync();
+            if (affectedRows == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
 
         }
 
         public async Task<List<FolderResponse>> GetAllFolders()
         {
-            List<FolderResponse> virtualFolderResponses = _virtualFolderList.Select(folder => folder.ToFolderResponse()).ToList();
+            var folders = await _db.VirtualFolders.ToListAsync();
+            List<FolderResponse> virtualFolderResponses = folders.Select(folder => folder.ToFolderResponse()).ToList();
 
             for (int i = 0; i < virtualFolderResponses.Count; i++)
             {
@@ -88,11 +98,11 @@ namespace Services
                 virtualFoderPath = virtualFolderResponses[i]?.FolderName ?? "";
                 if (virtualFolderResponses[i] != null && virtualFolderResponses[i].ParentFolderId != null)
                 {
-                    VirtualFolder? parentFolder = _virtualFolderList.FirstOrDefault(f => f.Id == virtualFolderResponses[i].ParentFolderId);
+                    VirtualFolder? parentFolder = _db.VirtualFolders.FirstOrDefault(f => f.Id == virtualFolderResponses[i].ParentFolderId);
                     while (parentFolder != null)
                     {
                         virtualFoderPath = Path.Combine(parentFolder.FolderName, virtualFoderPath);
-                        parentFolder = _virtualFolderList.FirstOrDefault(f => f.Id == parentFolder.ParentFolderId);
+                        parentFolder = _db.VirtualFolders.FirstOrDefault(f => f.Id == parentFolder.ParentFolderId);
                     }
                 }
 
@@ -108,7 +118,7 @@ namespace Services
             {
                 throw new ArgumentException("Folder ID cannot be empty.");
             }
-            VirtualFolder? folder = _virtualFolderList.FirstOrDefault(x => x.Id == id);
+            VirtualFolder? folder = _db.VirtualFolders.FirstOrDefault(x => x.Id == id);
             if (folder == null)
             {
                 throw new KeyNotFoundException("Folder not found.");
@@ -123,17 +133,17 @@ namespace Services
                 throw new ArgumentException("Invalid folder update request.");
             }
             ValidationHelper.ModelValidation(folderUpdateRequest);
-            VirtualFolder? folderToUpdate = _virtualFolderList.FirstOrDefault(x => x.Id == folderUpdateRequest.Id);
+            VirtualFolder? folderToUpdate = _db.VirtualFolders.FirstOrDefault(x => x.Id == folderUpdateRequest.Id);
             if (folderToUpdate == null)
             {
                 throw new KeyNotFoundException("Folder not found.");
             }
-            if (_virtualFolderList.Any(x => x.FolderName == folderUpdateRequest.FolderName))
+            if (_db.VirtualFolders.Any(x => x.FolderName == folderUpdateRequest.FolderName))
             {
                 throw new ArgumentException("Folder with the same name already exists.");
             }
             folderToUpdate.FolderName = folderUpdateRequest.FolderName;
-            WriteXmlFile(_virtualFolderList);
+            await _db.SaveChangesAsync();
 
             return folderToUpdate.ToFolderResponse();
         }
@@ -145,8 +155,8 @@ namespace Services
                 throw new ArgumentException("Invalid folder move request.");
             }
             ValidationHelper.ModelValidation(folderToFolderRequest);
-            VirtualFolder? sourceFolder = _virtualFolderList.FirstOrDefault(x => x.Id == folderToFolderRequest.Id);
-            VirtualFolder? destinationFolder = _virtualFolderList.FirstOrDefault(x => x.Id == folderToFolderRequest.ParentFolderId);
+            VirtualFolder? sourceFolder = _db.VirtualFolders.FirstOrDefault(x => x.Id == folderToFolderRequest.Id);
+            VirtualFolder? destinationFolder = _db.VirtualFolders.FirstOrDefault(x => x.Id == folderToFolderRequest.ParentFolderId);
             if (sourceFolder == null)
             {
                 throw new KeyNotFoundException("Source or destination folder not found.");
@@ -163,11 +173,11 @@ namespace Services
                 {
                     throw new ArgumentException("Cannot move folder into its own subfolder.");
                 }
-                destinationFolder = _virtualFolderList.FirstOrDefault(x => x.Id == destinationFolder.ParentFolderId);
+                destinationFolder = _db.VirtualFolders.FirstOrDefault(x => x.Id == destinationFolder.ParentFolderId);
             }
 
             sourceFolder.ParentFolderId = folderToFolderRequest.ParentFolderId;
-            WriteXmlFile(_virtualFolderList);
+            await _db.SaveChangesAsync();
             return sourceFolder.ToFolderResponse();
         }
     }
