@@ -14,7 +14,7 @@ namespace ServiceContracts
         public Task<FileResponse> AddTextToFileAsync(FileAddTextToFileRequest fileAddTextToFileRequest);
         public Task<bool> DeleteFile(Guid? fileId);
         public Task<List<FileResponse>> ListFiles();
-        public FileResponse? GetFileDetails(Guid? fileId);
+        public Task<FileResponse?> GetFileDetails(Guid? fileId);
         public Task<FileResponse> MoveToFolder(FileToFolderRequest moveToFolderRequest);
     }
 }

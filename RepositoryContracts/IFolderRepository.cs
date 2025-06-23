@@ -14,5 +14,6 @@ namespace RepositoryContracts
         Task<List<VirtualFolder>> ListFolders();
         Task<VirtualFolder?> GetFolder(Guid folderId);
         Task<VirtualFolder> UpdateFolder(VirtualFolder folderDetails);
+        Task<bool> ContainsName(string folderName);
     }
 }

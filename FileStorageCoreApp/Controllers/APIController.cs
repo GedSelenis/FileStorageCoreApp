@@ -46,7 +46,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Guid fileID)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileID);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileID);
             if (fileResponse == null)
             {
                 return BadRequest("Could not find file");
@@ -59,7 +59,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddText(FileAddTextToFileRequest fileInputResponse,Guid fileID)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileID);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileID);
             if (fileResponse == null)
             {
                 return BadRequest("Could not find file");
@@ -75,7 +75,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Rename(FileRenameRequest fileInputResponse,Guid fileID)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileID);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileID);
             if (fileResponse == null)
             {
                 return BadRequest("Could not find file");

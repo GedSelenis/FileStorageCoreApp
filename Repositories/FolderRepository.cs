@@ -25,6 +25,11 @@ namespace Repositories
             return folderDetails;
         }
 
+        public async Task<bool> ContainsName(string folderName)
+        {
+            return await _db.VirtualFolders.AnyAsync(f => f.FolderName == folderName);
+        }
+
         public async Task<bool> DeleteFolder(Guid folderId)
         {
             _db.VirtualFolders.RemoveRange(_db.VirtualFolders.Where(f => f.Id == folderId));

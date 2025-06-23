@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
+using System.Linq.Expressions;
 
 namespace Repositories
 {
@@ -19,6 +20,12 @@ namespace Repositories
             return fileDetails;
         }
 
+        public async Task<bool> Contains(Expression<Func<FileDetails, bool>> predicate)
+        {
+            bool result = await _db.FileDetails.AnyAsync(predicate);
+            return result;
+        }
+
         public async Task<bool> DeleteFile(Guid fileId)
         {
             _db.FileDetails.RemoveRange(_db.FileDetails.Where(f => f.Id == fileId));
@@ -33,7 +40,7 @@ namespace Repositories
 
         public async Task<List<FileDetails>> ListFiles()
         {
-            return await _db.FileDetails.ToListAsync();
+            return await _db.FileDetails.Include("VirtualFolder").ToListAsync();
         }
 
         public async Task<FileDetails> UpdateFile(FileDetails fileDetails)

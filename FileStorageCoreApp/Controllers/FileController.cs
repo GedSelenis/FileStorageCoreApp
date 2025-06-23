@@ -56,7 +56,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid fileID)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileID);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileID);
             if (fileResponse == null)
             {
                 return RedirectToAction("Index", "File");
@@ -69,12 +69,12 @@ namespace FileStorageCoreApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(FileResponse fileInputResponse)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileInputResponse.Id);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileInputResponse.Id);
             if (fileResponse == null)
             {
                 return RedirectToAction("Index", "File");
             }
-            _fileDetailsService.DeleteFile(fileResponse.Id);
+            await _fileDetailsService.DeleteFile(fileResponse.Id);
             return RedirectToAction("Index", "File");
         }
 
@@ -82,7 +82,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpGet]
         public async Task<IActionResult> AddText(Guid fileID)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileID);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileID);
             if (fileResponse == null)
             {
                 return RedirectToAction("Index", "File");
@@ -101,7 +101,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddText(FileAddTextToFileRequest fileInputResponse)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileInputResponse.Id);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileInputResponse.Id);
             if (fileResponse == null)
             {
                 return RedirectToAction("Index", "File");
@@ -114,7 +114,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Rename(Guid fileID)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileID);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileID);
             if (fileResponse == null)
             {
                 return RedirectToAction("Index", "File");
@@ -133,7 +133,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Rename(FileRenameRequest fileInputResponse)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileInputResponse.Id);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileInputResponse.Id);
             if (fileResponse == null)
             {
                 return RedirectToAction("Index", "File");
@@ -146,7 +146,7 @@ namespace FileStorageCoreApp.Controllers
         [HttpGet]
         public async Task<IActionResult> MoveToFolder(Guid fileID)
         {
-            FileResponse? fileResponse = _fileDetailsService.GetFileDetails(fileID);
+            FileResponse? fileResponse = await _fileDetailsService.GetFileDetails(fileID);
             ViewBag.VirtualFolders = (await _virtualFolderService.GetAllFolders()).Select(temp => new SelectListItem() { Text = temp.FolderName, Value = temp.Id.ToString() });
             if (fileResponse == null)
             {
