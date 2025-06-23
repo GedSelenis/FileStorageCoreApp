@@ -138,7 +138,7 @@ namespace FileStorageCoreApp.Controllers
             {
                 return RedirectToAction("Index", "File");
             }
-            _fileDetailsService.RenameFile(fileInputResponse);
+            var res = await _fileDetailsService.RenameFile(fileInputResponse);
             return RedirectToAction("Index", "File");
         }
 

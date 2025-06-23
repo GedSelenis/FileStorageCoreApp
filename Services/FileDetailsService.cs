@@ -143,7 +143,7 @@ namespace Services
             {
                 throw new ArgumentNullException(nameof(fileRenameRequest), "FileRenameRequest cannot be null.");
             }
-            ValidationHelper.ModelValidation(fileRenameRequest);
+            //ValidationHelper.ModelValidation(fileRenameRequest);
             FileDetails? fileDetails = await _fileRepository.GetFileDetails(fileRenameRequest.Id);
             if (fileDetails == null)
             {
@@ -211,9 +211,9 @@ namespace Services
             return await AddFile(fileAddRequest);
         }
 
-        Task<FileResponse> IFileService.RenameFile(FileRenameRequest fileRenameRequest)
+        async Task<FileResponse> IFileService.RenameFile(FileRenameRequest fileRenameRequest)
         {
-            return RenameFile(fileRenameRequest);
+            return await RenameFile(fileRenameRequest);
         }
 
         Task<FileResponse> IFileService.AddTextToFileAsync(FileAddTextToFileRequest fileAddTextToFileRequest)
