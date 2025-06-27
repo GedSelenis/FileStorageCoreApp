@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceContracts;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace FileStorageCoreApp.Controllers
 {
     [Route("File")]
+    [Authorize]
     public class FileController : Controller
     {
         IFileService _fileDetailsService;

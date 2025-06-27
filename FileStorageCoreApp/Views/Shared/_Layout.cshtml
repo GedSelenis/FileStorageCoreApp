@@ -1,5 +1,4 @@
 ﻿<!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -23,4 +22,7 @@
         </div>
     </div>
 </body>
+@section Scripts {
+        @await RenderSectionAsync("Scripts", required: false)
+}
 </html>
