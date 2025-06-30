@@ -16,6 +16,8 @@ namespace Entities
         public string FileName { get; set; }
         [StringLength(200)]
         public string FilePath { get; set; }
+        [StringLength(100)]
+        public string AddedBy { get; set; }
         public Guid? VirualFolderId { get; set; }
         [ForeignKey("VirualFolderId")]
         public VirtualFolder? VirtualFolder { get; set; }
@@ -26,6 +28,14 @@ namespace Entities
             this.FilePath = filePath;
             this.VirualFolderId = virualFolder;
             this.Id = Guid.NewGuid();
+        }
+        public FileDetails(string fileName, string filePath, Guid? virualFolder, string addedBy)
+        {
+            this.FileName = fileName;
+            this.FilePath = filePath;
+            this.VirualFolderId = virualFolder;
+            this.Id = Guid.NewGuid();
+            this.AddedBy = addedBy;
         }
         public FileDetails(Guid id, string fileName, string filePath)
         {

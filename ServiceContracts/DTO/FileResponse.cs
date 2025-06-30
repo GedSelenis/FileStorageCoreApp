@@ -14,6 +14,7 @@ namespace ServiceContracts.DTO
         public string FilePath { get; set; }
         public Guid? VirualFolderId { get; set; }
         public string? VirualFolderName { get; set; }
+        public string? AddedBy { get; set; }
         public FileResponse()
         {
             FileName = string.Empty;
@@ -36,6 +37,7 @@ namespace ServiceContracts.DTO
                 FileName = fileDetails.FileName,
                 FilePath = fileDetails.FilePath,
                 VirualFolderId = fileDetails.VirualFolderId,
+                AddedBy = fileDetails.AddedBy
             };
         }
     }

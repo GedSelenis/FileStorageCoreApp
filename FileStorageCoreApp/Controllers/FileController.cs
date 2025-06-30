@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceContracts;
@@ -15,10 +16,12 @@ namespace FileStorageCoreApp.Controllers
     {
         IFileService _fileDetailsService;
         IVirtualFolderService _virtualFolderService;
-        public FileController(IFileService fileDetailsService, IVirtualFolderService virtualFolderService)
+        private readonly UserManager<IdentityUser> _userManager;
+        public FileController(IFileService fileDetailsService, IVirtualFolderService virtualFolderService,UserManager<IdentityUser> userManager)
         {
             _fileDetailsService = fileDetailsService;
             _virtualFolderService = virtualFolderService;
+            _userManager = userManager;
         }
         [Route("Index")]
         [Route("/")]
@@ -50,6 +53,7 @@ namespace FileStorageCoreApp.Controllers
                 ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return View();
             }
+            fileAddRequest.AddedBy = _userManager.GetUserName(HttpContext.User) ?? string.Empty;
             FileResponse fileResponse = await _fileDetailsService.AddFile(fileAddRequest);
             return RedirectToAction("Index","File");
         }

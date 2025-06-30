@@ -15,6 +15,7 @@ namespace ServiceContracts.DTO
         [Required(ErrorMessage = "FilePath cannot be blank")]
         public string FilePath { get; set; }
         public Guid? VirualFolderId { get; set; }
+        public string? AddedBy { get; set; }
         public FileAddRequest(string fileName, string filePath)
         {
             FileName = fileName;
@@ -28,7 +29,7 @@ namespace ServiceContracts.DTO
 
         public FileDetails ToFileDetails()
         {
-            return new FileDetails(FileName, FilePath, VirualFolderId);
+            return new FileDetails(FileName, FilePath, VirualFolderId, AddedBy);
         }
     }
 }
