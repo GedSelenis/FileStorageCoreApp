@@ -16,11 +16,15 @@ namespace Entities
         }
         public DbSet<FileDetails> FileDetails { get; set; }
         public DbSet<VirtualFolder> VirtualFolders { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<SecretUser> SecretUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<FileDetails>().ToTable("FileDetails");
             modelBuilder.Entity<VirtualFolder>().ToTable("VirtualFolders");
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<SecretUser>().ToTable("SecretUsers");
         }
     }
 }

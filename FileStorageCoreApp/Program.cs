@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFileService, FileDetailsService>();
 builder.Services.AddScoped<IVirtualFolderService, VirtualFolderService>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
