@@ -21,6 +21,7 @@ namespace Entities
         public string? NormalizedUserName { get; set; }
         [StringLength(256)]
         public string? NormalizedEmail { get; set; }
+        public bool EmailConfirmed { get; set; }
         [StringLength(450)]
         public Guid? SecretUserId { get; set; }
 

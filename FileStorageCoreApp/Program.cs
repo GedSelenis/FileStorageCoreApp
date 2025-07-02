@@ -14,13 +14,14 @@ builder.Services.AddScoped<IFileService, FileDetailsService>();
 builder.Services.AddScoped<IVirtualFolderService, VirtualFolderService>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<IFolderRepository, FolderRepository>();
+builder.Services.AddScoped<IUserStore<IdentityUser>, UserStore>();
 builder.Services.AddDbContext<ApplicationDbContext>
     (options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options => { options.SignIn.RequireConfirmedAccount = true;}).AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddAuthentication()
         .AddCookie(options =>
         {
@@ -35,5 +36,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapRazorPages();
+
 
 app.Run();
